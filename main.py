@@ -1,4 +1,4 @@
 
 def main():
- print("dffghhfwwggr")
+ print("hjgffg")
 main()
