@@ -1,6 +1,14 @@
-from silnik.silnik_symulacji import generuj_mape
+from pygame.examples import grid
 
+from silnik.silnik_symulacji import generuj_mape
+from gui.wizualizacja import okno
 
 def main():
- generuj_mape(gridSize = 10, spawnRate = 2, seed = 123)
+ seed =123
+ spawn_rate=2
+ rozmiar_siatki =40
+
+ mapa = generuj_mape(gridSize = rozmiar_siatki, spawnRate = spawn_rate, seed = seed)
+ ekran=okno(grid=mapa)
+ ekran.run()
 main()

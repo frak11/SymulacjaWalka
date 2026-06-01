@@ -4,23 +4,28 @@ import pygame
 pygame.init()
 
 
-wysokosc: int = 1200
-szerokosc: int = 800
-kafelek: int = 20
 
-panel_boczny: int = wysokosc - szerokosc
+
 kolor_tlo = (30, 30, 30)
-kolor_panelu = (20, 20, 20)
+kolor_panelu = (0, 0, 0)
 kolor_siatka = (50, 50, 50)
 kolor_ziemia = (34, 139, 34)
+kolor_drewno = (139, 69, 19)
+kolor_kamien = (128, 128, 128)
+kolor_zelazo = (192, 192, 192)
 
 
 class okno:
 
-    def __init__(self):
+    def __init__(self,grid):
         pygame.init()
-
-        self.screen = pygame.display.set_mode((wysokosc, szerokosc))
+        self.grid = grid
+        self.gridSize = len(self.grid)
+     
+        self.kafelek: int = 20
+        self.pixele = self.gridSize * self.kafelek
+        self.panel_boczny = 400
+        self.screen = pygame.display.set_mode((self.pixele+ self.panel_boczny, self.pixele ))
         pygame.display.set_caption("2D mapa")
         self.clock = pygame.time.Clock()
         self.running = True
@@ -35,21 +40,31 @@ class okno:
 
             self.screen.fill(kolor_tlo)
 
-            for y in range(szerokosc // kafelek):
-                for x in range(szerokosc // kafelek):
-                    pozycjax = x * kafelek
-                    pozycjay = y * kafelek
+            for y in range(self.gridSize):
+                for x in range(self.gridSize):
+                    pozycjax = x * self.kafelek
+                    pozycjay = y * self.kafelek
 
-                    kwadrat = pygame.Rect(pozycjax, pozycjay, kafelek, kafelek)
-                    pygame.draw.rect(self.screen, kolor_ziemia, kwadrat)
+                    kwadrat = pygame.Rect(pozycjax, pozycjay, self.kafelek, self.kafelek)
+                    rodzaj_pola = self.grid[y][x]
+                    if rodzaj_pola == "D":
+                        kolor=kolor_drewno
+                    elif rodzaj_pola == "K":
+                        kolor=kolor_kamien
+                    elif rodzaj_pola == "Z":
+                        kolor=kolor_zelazo
+                    else:
+                        kolor=kolor_ziemia
+
+                    pygame.draw.rect(self.screen, kolor, kwadrat)
                     pygame.draw.rect(self.screen, kolor_siatka, kwadrat, 1)
 
 
 
-            obszar_panelu = pygame.Rect(szerokosc, 0, panel_boczny, szerokosc)
+            obszar_panelu = pygame.Rect(self.pixele , 0, self.panel_boczny, self.pixele )
             pygame.draw.rect(self.screen, kolor_panelu, obszar_panelu)
             pygame.draw.line(
-                self.screen, kolor_siatka, (szerokosc, 0), (szerokosc, szerokosc), 2
+                self.screen, kolor_siatka, (self.pixele , 0), (self.pixele , self.pixele ), 2
             )
 
 
@@ -62,7 +77,3 @@ class okno:
         sys.exit()
 
 
-
-if __name__ == "__main__":
-    gra = okno()
-    gra.run()
