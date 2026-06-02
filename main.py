@@ -8,7 +8,7 @@ from silnik.silnik_panstwo import Panstwo
 
 
 def main():
-    seed = 123
+    seed = 1
     spawn_rate = 2
     rozmiar_siatki =40
     liczba_tur =100

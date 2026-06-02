@@ -5,9 +5,11 @@ from pygame.examples import grid
 drewno_na_start:int=30
 kamien_na_start:int=0
 zelazo_na_start:int=0
+jedzenie_na_start:int=10
 drewno_na_ture: int = 2
 kamien_na_ture: int = 2
 zelazo_na_ture: int = 2
+jedzenie_na_ture: int = 2
 koszt_ekspansji:int =10
 
 class Panstwo:
@@ -21,9 +23,11 @@ class Panstwo:
             "drewno": drewno_na_start,
             "kamien": kamien_na_start,
             "zelazo": zelazo_na_start,
+            "jedzenie": jedzenie_na_start,
         }
 
     def zbierz_surowce(self, grid: list[list[str]]):
+        drewno_tura = self.zasoby["drewno"]
         for x, y in self.terytorium:
             rodzaj_pola = grid[y][x]
             if rodzaj_pola == "D":
@@ -35,8 +39,13 @@ class Panstwo:
             elif rodzaj_pola == "Z":
                 self.zasoby["zelazo"] += zelazo_na_ture
                 print(self.nazwa + "stan zelaza" + str(self.zasoby["zelazo"]))
+            elif rodzaj_pola == "J":
+                self.zasoby["jedzenie"] += jedzenie_na_ture
+                print(self.nazwa + "stan jedzenia" + str(self.zasoby["jedzenie"]))
             else:
                 pass
+        if drewno_tura == self.zasoby["drewno"]:
+            self.zasoby["drewno"] += 1
     def ekspansja(self,grid_size: int,zajete_pola: set[tuple[int, int]]):
         if self.zasoby["drewno"] <koszt_ekspansji:
             return

@@ -14,6 +14,8 @@ def generuj_mape(gridSize, spawnRate, seed):
                 grid[i][j] = "K"
             if chance > 0.08 * spawnRate and chance <= 0.1 * spawnRate:
                 grid[i][j] = "Z"
+            if chance > 0.1 * spawnRate and chance <= 0.13 * spawnRate:
+                grid[i][j] = "J"
 
     for i in range(gridSize):
         for j in range(gridSize):

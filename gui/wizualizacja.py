@@ -9,6 +9,7 @@ kolor_ziemia = (34, 139, 34)
 kolor_drewno = (139, 69, 19)
 kolor_kamien = (128, 128, 128)
 kolor_zelazo = (192, 192, 192)
+kolor_jedzenie = (245,222,179)
 
 
 class okno:
@@ -68,6 +69,8 @@ class okno:
                         kolor = kolor_kamien
                     elif rodzaj_pola == "Z":
                         kolor = kolor_zelazo
+                    elif rodzaj_pola == "J":
+                        kolor = kolor_jedzenie
                     else:
                         kolor = kolor_ziemia
 
