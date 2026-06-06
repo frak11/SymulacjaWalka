@@ -11,10 +11,12 @@ kolor_kamien = (128, 128, 128)
 kolor_zelazo = (192, 192, 192)
 kolor_jedzenie = (245,222,179)
 
+predkosc_wyswietlania_tur =1
 
 class okno:
     def __init__(self, grid, lista_panstw, rozmiar_siatki, zajete_pola, tura):
-        pygame.init()
+        self.czciona = pygame.font.SysFont("Arial", 18)
+        self.czcionka_naglowek = pygame.font.SysFont("Arial", 24, bold=True)
         self.grid = grid
         self.gridSize = len(self.grid)
         self.lista_panstw = lista_panstw
@@ -24,7 +26,7 @@ class okno:
 
         self.kafelek: int = 20
         self.pixele = self.gridSize * self.kafelek
-        self.panel_boczny = 400
+        self.panel_boczny = 600
 
         self.screen = pygame.display.set_mode(
             (self.pixele + self.panel_boczny, self.pixele)
@@ -43,7 +45,7 @@ class okno:
                     self.running = False
             b = pygame.time.get_ticks()
 
-            if b - d > 1000:
+            if b - d > predkosc_wyswietlania_tur *1000:
                 self.numer_tury+=1
                 self.wykonaj_ture()
                 d=b
@@ -92,6 +94,29 @@ class okno:
                 (self.pixele, self.pixele),
                 2,
             )
+            tekst_tura=self.czcionka_naglowek.render(f"Tura: {self.numer_tury}", True, (255, 255, 255))
+            self.screen.blit(tekst_tura, (self.pixele+ 20, 20))
+
+            pozycja_wyswietlenia =80
+
+            for panstwo in self.lista_panstw:
+                kwadrat = pygame.Rect(self.pixele +20, pozycja_wyswietlenia+ 5, 15,15)
+                pygame.draw.rect(self.screen, panstwo.kolor, kwadrat)
+                tekst_nazwa = self.czcionka_naglowek.render(panstwo.nazwa, True, panstwo.kolor)
+                self.screen.blit(tekst_nazwa, (self.pixele+ 45, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 30
+
+                surowce_str = (
+                    f"Terytorium: {len(panstwo.terytorium)} "
+                    f"Drewno: {panstwo.zasoby['drewno']} "
+                    f"Kamien: {panstwo.zasoby['kamien']} "
+                    f"Żelazo: {panstwo.zasoby['zelazo']} "
+                    f"Jedzenie: {panstwo.zasoby['jedzenie']} "
+                    f"Jednostki: {panstwo.zasoby['jednostki']} "
+                )
+                tekt_staty =self.czciona.render(surowce_str, True, panstwo.kolor)
+                self.screen.blit(tekt_staty, (self.pixele+ 20, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 45
 
             pygame.display.flip()
 

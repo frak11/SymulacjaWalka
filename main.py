@@ -1,10 +1,12 @@
+import pygame
+
 from silnik.silnik_symulacji import generuj_mape
 from gui.wizualizacja import okno
 from silnik.silnik_panstwo import Panstwo
 
 def main():
-
-    seed = 167324
+    pygame.init()
+    seed = 1
     spawn_rate = 7
     rozmiar_siatki = 40
     zajete_pola: set[tuple[int, int]] = set()

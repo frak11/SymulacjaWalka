@@ -42,7 +42,7 @@ class Panstwo:
             chance = random.random()
             temp_liczba_prob -= 1
             if chance < szansa_ekspansji:
-                if self.zasoby["drewno"] > 0:
+                if self.zasoby["drewno"] >= koszt_ekspansji:
                     self.ekspansja(grid_size, zajete_pola)
                     temp_jednostki -= 1
             elif chance < (szansa_ekspansji + szansa_nowej_jednostki):
