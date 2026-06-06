@@ -13,13 +13,14 @@ kolor_jedzenie = (245,222,179)
 
 
 class okno:
-    def __init__(self, grid, lista_panstw,rozmiar_siatki, zajete_pola):
+    def __init__(self, grid, lista_panstw, rozmiar_siatki, zajete_pola, tura):
         pygame.init()
         self.grid = grid
         self.gridSize = len(self.grid)
         self.lista_panstw = lista_panstw
         self.rozmiar_siatki = rozmiar_siatki
         self.zajete_pola = zajete_pola
+        self.wykonaj_ture = tura
 
         self.kafelek: int = 20
         self.pixele = self.gridSize * self.kafelek
@@ -31,7 +32,7 @@ class okno:
         pygame.display.set_caption("2D mapa")
         self.clock = pygame.time.Clock()
         self.running = True
-        self.tura= 0
+        self.numer_tury= 0
 
 
     def run(self):
@@ -43,14 +44,9 @@ class okno:
             b = pygame.time.get_ticks()
 
             if b - d > 1000:
-                self.tura+=1
-                for p in self.lista_panstw:
-                    p.zbierz_surowce(self.grid)
-                    p.ekspansja(self.gridSize, self.zajete_pola)
-
+                self.numer_tury+=1
+                self.wykonaj_ture()
                 d=b
-
-
 
             self.screen.fill(kolor_tlo)
 

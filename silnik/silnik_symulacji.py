@@ -1,24 +1,18 @@
 import random
 
-
-def generuj_mape(gridSize, spawnRate, seed):
+def generuj_mape(grid_size, spawn_rate, seed):
     random.seed(seed)
 
-    grid = [[0 for _ in range(gridSize)] for _ in range(gridSize)]
-    for i in range(gridSize):
-        for j in range(gridSize):
+    grid = [["X" for _ in range(grid_size)] for _ in range(grid_size)]
+    for i in range(grid_size):
+        for j in range(grid_size):
             chance = random.random()
-            if chance <= 0.05 * spawnRate:
+            if chance < 0.045 * spawn_rate:
                 grid[i][j] = "D"
-            if chance > 0.05 * spawnRate and chance <= 0.08 * spawnRate:
+            elif chance < 0.07 * spawn_rate:
                 grid[i][j] = "K"
-            if chance > 0.08 * spawnRate and chance <= 0.1 * spawnRate:
+            elif chance < 0.085 * spawn_rate:
                 grid[i][j] = "Z"
-            if chance > 0.1 * spawnRate and chance <= 0.13 * spawnRate:
+            elif chance < 0.1 * spawn_rate:
                 grid[i][j] = "J"
-
-    for i in range(gridSize):
-        for j in range(gridSize):
-            print(grid[i][j], end=" ")
-        print()
     return grid
