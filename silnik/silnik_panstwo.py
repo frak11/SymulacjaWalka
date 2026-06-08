@@ -5,11 +5,23 @@ kamien_na_start:int=0
 zelazo_na_start:int=0
 jedzenie_na_start:int=10
 jednostki_na_start: int=3
+
 drewno_na_ture: int = 2
 kamien_na_ture: int = 2
 zelazo_na_ture: int = 2
 jedzenie_na_ture: int = 2
+
 koszt_ekspansji:int = 5
+
+obrazenia_broni_zelaznej:int = 4
+obrazenia_broni_kamiennej:int = 3
+obrazenia_broni_drewnianej:int = 2
+obrazenia_jednostek_bez_broni:int = 1
+
+obrona_pancerza_zelaznego:int = 4
+obrona_pancerza_kamiennego:int = 3
+obrona_pancerza_drewnianego:int = 2
+obrona_jednostek_bez_pancerza:int = 1
 
 class Panstwo:
     def __init__(
@@ -18,6 +30,7 @@ class Panstwo:
         self.nazwa = nazwa
         self.kolor = kolor
         self.agresja = agresja
+        self.typ = "atk" if agresja > 0.5 else "def"
         self.terytorium: set[tuple[int, int]] = {(stolica_x, stolica_y)}
         self.zasoby: dict[str, int] = {
             "drewno": drewno_na_start,
@@ -25,6 +38,29 @@ class Panstwo:
             "zelazo": zelazo_na_start,
             "jedzenie": jedzenie_na_start,
             "jednostki": jednostki_na_start,
+        }
+        self.wyposazenie: dict[str, int] = {
+            "drewniana_bron_atk": 0,
+            "drewniana_bron_def": 0,
+            
+            "drewniany_pancerz_atk": 0,
+            "drewniany_pancerz_def": 0,
+            
+            "kamienna_bron_atk": 0,
+            "kamienna_bron_def": 0,
+            
+            "kamienny_pancerz_atk": 0,
+            "kamienny_pancerz_def": 0,
+            
+            "zelazna_bron_atk": 0,
+            "zelazna_bron_def": 0,
+            
+            "zelazny_pancerz_atk": 0,
+            "zelazny_pancerz_def": 0,
+        }
+        self.statystyki: dict[str, int] = {
+            "atak": 0,
+            "obrona": 0,
         }
 
     def przydziel_jednostki(self, grid_size: int, zajete_pola: set[tuple[int, int]], grid: list[list[str]]):
@@ -70,8 +106,6 @@ class Panstwo:
                 if any(grid[y][x] == "J" for x, y in self.terytorium):
                     self.zasoby["jedzenie"] += 5
                     temp_jednostki -= 1
-        del temp_jednostki
-        del temp_liczba_prob
 
     def utrzymanie_jednostek(self):
         if self.zasoby["jedzenie"] >= self.zasoby["jednostki"]:
@@ -79,6 +113,60 @@ class Panstwo:
         else:
             self.zasoby["jednostki"] -= self.zasoby["jedzenie"]
             self.zasoby["jedzenie"] = 0
+
+        if self.zasoby["jednostki"] < 0:
+            self.zasoby["jednostki"] = 0
+
+    def tworzenie_wyposazenia(self, kategoria: str):
+        if self.wyposazenie[f"zelazn{kategoria}_{self.typ}"] < self.zasoby["jednostki"]:
+            if self.zasoby["zelazo"] > 0:
+                self.zasoby["zelazo"] -= 1
+                self.wyposazenie[f"zelazn{kategoria}_{self.typ}"] += 1
+
+            elif self.wyposazenie[f"kamienn{kategoria}_{self.typ}"] > 1:
+                self.wyposazenie[f"kamienn{kategoria}_{self.typ}"] -= 2
+                self.wyposazenie[f"zelazn{kategoria}_{self.typ}"] += 1
+
+        if self.wyposazenie[f"kamienn{kategoria}_{self.typ}"] < self.zasoby["jednostki"] - self.wyposazenie[f"zelazn{kategoria}_{self.typ}"]:
+            if self.zasoby["kamien"] > 0:
+                self.zasoby["kamien"] -= 1
+                self.wyposazenie[f"kamienn{kategoria}_{self.typ}"] += 1
+
+            elif self.wyposazenie[f"drewnian{kategoria}_{self.typ}"] > 1:
+                self.wyposazenie[f"drewnian{kategoria}_{self.typ}"] -= 2
+                self.wyposazenie[f"kamienn{kategoria}_{self.typ}"] += 1
+
+        if self.wyposazenie[f"drewnian{kategoria}_{self.typ}"] < self.zasoby["jednostki"] - self.wyposazenie[f"zelazn{kategoria}_{self.typ}"] - self.wyposazenie[f"kamienn{kategoria}_{self.typ}"]:
+            if self.zasoby["drewno"] > 0:
+                self.zasoby["drewno"] -= 1
+                self.wyposazenie[f"drewnian{kategoria}_{self.typ}"] += 1
+
+    def produkcja(self):
+        if self.typ == "atk":
+            self.tworzenie_wyposazenia("a_bron")
+            self.tworzenie_wyposazenia("y_pancerz")
+        else:
+            self.tworzenie_wyposazenia("y_pancerz")
+            self.tworzenie_wyposazenia("a_bron")
+
+    def aktualizacja_statystyk(self):
+        if self.typ == "atk":
+            modyfikator = 2
+        else:
+            modyfikator = 1
+            
+        uzywana_zelazna_bron = min(self.wyposazenie[f"zelazna_bron_{self.typ}"], self.zasoby["jednostki"])
+        uzywana_kamienna_bron = min(self.wyposazenie[f"kamienna_bron_{self.typ}"], max(0, self.zasoby["jednostki"] - uzywana_zelazna_bron))
+        uzywana_drewniana_bron = min(self.wyposazenie[f"drewniana_bron_{self.typ}"], max(0,self.zasoby["jednostki"] - uzywana_zelazna_bron - uzywana_kamienna_bron))
+        uzywani_ludzie_bron = min(self.zasoby["jednostki"], max(0,self.zasoby["jednostki"] - uzywana_zelazna_bron - uzywana_kamienna_bron - uzywana_drewniana_bron))
+
+        uzywany_zelazny_pancerz = min(self.wyposazenie[f"zelazny_pancerz_{self.typ}"], self.zasoby["jednostki"])
+        uzywany_kamienny_pancerz = min(self.wyposazenie[f"kamienny_pancerz_{self.typ}"], max(0, self.zasoby["jednostki"] - uzywany_zelazny_pancerz))
+        uzywany_drewniany_pancerz = min(self.wyposazenie[f"drewniany_pancerz_{self.typ}"],max(0,self.zasoby["jednostki"] - uzywany_zelazny_pancerz - uzywany_kamienny_pancerz))
+        uzywani_ludzie_pancerz = min(self.zasoby["jednostki"], max(0, self.zasoby["jednostki"] - uzywany_zelazny_pancerz - uzywany_kamienny_pancerz - uzywany_drewniany_pancerz))
+
+        self.statystyki["atak"] = uzywana_zelazna_bron * obrazenia_broni_zelaznej * modyfikator + uzywana_kamienna_bron * obrazenia_broni_kamiennej * modyfikator + uzywana_drewniana_bron * obrazenia_broni_drewnianej * modyfikator + uzywani_ludzie_bron * obrazenia_jednostek_bez_broni * modyfikator
+        self.statystyki["obrona"] = uzywany_zelazny_pancerz * obrona_pancerza_zelaznego * modyfikator + uzywany_kamienny_pancerz * obrona_pancerza_kamiennego * modyfikator + uzywany_drewniany_pancerz * obrona_pancerza_drewnianego * modyfikator + uzywani_ludzie_pancerz * obrona_jednostek_bez_pancerza * modyfikator
 
     # def zbierz_surowce(self, grid: list[list[str]]):
     #     drewno_tura = self.zasoby["drewno"]

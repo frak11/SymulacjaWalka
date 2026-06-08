@@ -52,6 +52,8 @@ def main():
         for p in lista_panstw:
             p.przydziel_jednostki(rozmiar_siatki, zajete_pola, mapa)
             p.utrzymanie_jednostek()
+            p.produkcja()
+            p.aktualizacja_statystyk()
 
     ekran = okno(
         grid=mapa,
