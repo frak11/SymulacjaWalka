@@ -21,7 +21,7 @@ def main():
         stolica_x=0,
         stolica_y=0,
         kolor=(255,0,0),
-        agresja=1
+        agresja= .3
     )
 
     panstwo2 = PanstwoDefensywne(
@@ -48,6 +48,7 @@ def main():
         agresja=0.3,
     )
 
+
     lista_panstw = [panstwo1, panstwo2, panstwo3, panstwo4]
     for p in lista_panstw:
         for pole in p.terytorium:
@@ -59,6 +60,8 @@ def main():
             p.utrzymanie_jednostek()
             p.produkcja()
             p.aktualizacja_statystyk()
+        for p in lista_panstw:
+            sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
 
         for p in lista_panstw[:]:
             if p in lista_panstw:
