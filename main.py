@@ -8,7 +8,7 @@ from silnik.silnik_panstwo import Panstwo
 
 def main():
     pygame.init()
-    seed =14343
+    seed =1435434
     random.seed(seed)
     spawn_rate = 7
     rozmiar_siatki = 40
@@ -61,7 +61,7 @@ def main():
             p.produkcja()
             p.aktualizacja_statystyk()
         for p in lista_panstw:
-            sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
+            SystemWojen.sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
 
         for p in lista_panstw[:]:
             if p in lista_panstw:

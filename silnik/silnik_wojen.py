@@ -25,6 +25,7 @@ class SystemWojen:
                             # oba panstwa zniszczyly sie w tym samym czasie
                             lista_panstw.remove(panstwo_atakujace)
                             lista_panstw.remove(panstwo_broniace)
+                            print(panstwo_broniace.nazwa +"i"+ panstwo_atakujace.nazwa + " zniszczyły się nawzajem")
                             for pole in panstwo_broniace.terytorium:
                                 del zajete_pola[pole]
                             for pole in panstwo_atakujace.terytorium:
