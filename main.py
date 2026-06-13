@@ -1,15 +1,18 @@
 import pygame
+import random
 from silnik.silnik_symulacji import generuj_mape
 from gui.wizualizacja import okno
 from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
+from silnik.silnik_wojen import SystemWojen
+from silnik.silnik_panstwo import Panstwo
 
 def main():
     pygame.init()
-    seed = 855254
+    seed =14343
     random.seed(seed)
     spawn_rate = 7
     rozmiar_siatki = 40
-    zajete_pola: dict[tuple[int, int], Panstwo] = dict()
+    zajete_pola: dict[tuple[int, int], 'Panstwo'] = dict()
 
     mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate)
 
@@ -49,7 +52,7 @@ def main():
     lista_panstw = [panstwo1, panstwo2, panstwo3, panstwo4]
     for p in lista_panstw:
         for pole in p.terytorium:
-            zajete_pola[pole] = p
+            zajete_pola[pole] =p
 
     def wykonaj_ture():
         for p in lista_panstw:
@@ -59,6 +62,10 @@ def main():
             p.aktualizacja_statystyk()
         for p in lista_panstw:
             sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
+
+        for p in lista_panstw[:]:
+            if p in lista_panstw:
+                SystemWojen.sprawdz_wojne(p,rozmiar_siatki,zajete_pola,lista_panstw)
 
     ekran = okno(
         grid=mapa,

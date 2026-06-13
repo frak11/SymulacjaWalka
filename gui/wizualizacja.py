@@ -46,6 +46,10 @@ class okno:
                     if event.key == pygame.K_SPACE:
                         self.numer_tury += 1
                         self.wykonaj_ture()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    for tury in range(10):
+                        self.numer_tury += 1
+                        self.wykonaj_ture()
 
             self.screen.fill(kolor_tlo)
 

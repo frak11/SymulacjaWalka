@@ -154,7 +154,7 @@ class Panstwo:
             + ludzie_pancerz * obrona_jednostek_bez_pancerza
         ) * modyfikator_def
 
-    def ekspansja(self, grid_size: int, zajete_pola: set[tuple[int, int]], koszt: int):
+    def ekspansja(self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], koszt: int):
         mozliwe_pola: set[tuple[int, int]] = set()
         sasiedzi = [(0, -1), (-1, 0), (0, 1), (1, 0)]
         for x, y in self.terytorium:
@@ -166,7 +166,7 @@ class Panstwo:
         if mozliwe_pola:
             losowanie_pola = random.choice(list(mozliwe_pola))
             self.terytorium.add(losowanie_pola)
-            zajete_pola.add(losowanie_pola)
+            zajete_pola[losowanie_pola] =self
             self.zasoby.zmien_drewno(-koszt)
 
     def przydziel_jednostki(
