@@ -45,7 +45,7 @@ class okno:
                     self.running = False
             b = pygame.time.get_ticks()
 
-            if b - d > predkosc_wyswietlania_tur *1000:
+            if b - d > predkosc_wyswietlania_tur *10:
                 self.numer_tury+=1
                 self.wykonaj_ture()
                 d=b
