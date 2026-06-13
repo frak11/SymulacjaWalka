@@ -58,7 +58,7 @@ class Panstwo:
             "obrona": 0,
         }
 
-    def przydziel_jednostki(self, grid_size: int, zajete_pola: set[tuple[int, int]], grid: list[list[str]]):
+    def przydziel_jednostki(self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], grid: list[list[str]]):
 
         koszt = koszt_ekspansji + len(self.terytorium)
         #tworzenie jednostek tak aby ich maksymalna liczba nie przekraczala ilosci wolnych pol * agresja
@@ -204,7 +204,7 @@ class Panstwo:
     #     if drewno_tura == self.zasoby["drewno"]:
     #         self.zasoby["drewno"] += 1
 
-    def ekspansja(self, grid_size: int, zajete_pola: set[tuple[int, int]], koszt):
+    def ekspansja(self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], koszt):
         mozliwe_pola: set[tuple[int, int]] = set()
         sasiedzi=[(0,-1),(-1,0),(0,1),(1,0)]
         for x, y in self.terytorium:
@@ -216,5 +216,5 @@ class Panstwo:
         if mozliwe_pola:
             losowanie_pola = random.choice(list(mozliwe_pola))
             self.terytorium.add(losowanie_pola)
-            zajete_pola.add(losowanie_pola)
+            zajete_pola[losowanie_pola] = self
             self.zasoby["drewno"] -= koszt
