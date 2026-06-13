@@ -5,19 +5,20 @@ from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
 
 def main():
     pygame.init()
-    seed = 1
+    seed = 855254
+    random.seed(seed)
     spawn_rate = 7
     rozmiar_siatki = 40
-    zajete_pola: set[tuple[int, int]] = set()
+    zajete_pola: dict[tuple[int, int], Panstwo] = dict()
 
-    mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate, seed=seed)
+    mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate)
 
     panstwo1 = PanstwoAgresywne(
         nazwa="imperium",
         stolica_x=0,
         stolica_y=0,
         kolor=(255,0,0),
-        agresja=1
+        agresja= .3
     )
 
     panstwo2 = PanstwoDefensywne(
@@ -44,10 +45,11 @@ def main():
         agresja=0.3,
     )
 
+
     lista_panstw = [panstwo1, panstwo2, panstwo3, panstwo4]
     for p in lista_panstw:
         for pole in p.terytorium:
-            zajete_pola.add(pole)
+            zajete_pola[pole] = p
 
     def wykonaj_ture():
         for p in lista_panstw:
@@ -55,6 +57,8 @@ def main():
             p.utrzymanie_jednostek()
             p.produkcja()
             p.aktualizacja_statystyk()
+        for p in lista_panstw:
+            sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
 
     ekran = okno(
         grid=mapa,

@@ -1,7 +1,6 @@
 import random
 
-def generuj_mape(grid_size, spawn_rate, seed):
-    random.seed(seed)
+def generuj_mape(grid_size, spawn_rate):
 
     grid = [["X" for _ in range(grid_size)] for _ in range(grid_size)]
     for i in range(grid_size):
