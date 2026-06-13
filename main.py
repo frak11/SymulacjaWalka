@@ -1,58 +1,47 @@
 import pygame
 import random
+import json
 from silnik.silnik_symulacji import generuj_mape
 from gui.wizualizacja import okno
 from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
 from silnik.silnik_wojen import SystemWojen
 from silnik.silnik_panstwo import Panstwo
-
+def wczytaj_konfiguracja(sciezka="konfiguracja.json"):
+    with open(sciezka) as json_file:
+        return json.load(json_file)
 def main():
+    config = wczytaj_konfiguracja()
     pygame.init()
-    seed =1435434
+    seed =config["seed"]
     random.seed(seed)
-    spawn_rate = 7
-    rozmiar_siatki = 40
+    spawn_rate =config["spawn_rate"]
+    rozmiar_siatki =config["rozmiar_siatki"]
+    losowe_pozycje=config["losowe_pozycje"]
     zajete_pola: dict[tuple[int, int], 'Panstwo'] = dict()
 
     mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate)
 
-    panstwo1 = PanstwoAgresywne(
-        nazwa="imperium",
-        stolica_x=0,
-        stolica_y=0,
-        kolor=(255,0,0),
-        agresja= .3
-    )
 
-    panstwo2 = PanstwoDefensywne(
-        nazwa="republika",
-        stolica_x=rozmiar_siatki -1,
-        stolica_y=rozmiar_siatki -1,
-        kolor=(0,0,255),
-        agresja=0
-    )
+    lista_panstw = []
+    for panstwa_data in config["panstwa"]:
+        if losowe_pozycje:
+            while True:
+                x = random.randrange(0, rozmiar_siatki-1)
+                y = random.randrange(0, rozmiar_siatki-1)
+                if(x,y) not in zajete_pola:
+                     break
+        else:
+            x=panstwa_data["stolica_x"]
+            y=panstwa_data["stolica_y"]
+        kolor = tuple(panstwa_data["kolor"])
 
-    panstwo3 = PanstwoDefensywne(
-        nazwa="p3",
-        stolica_x=0,
-        stolica_y=rozmiar_siatki - 1,
-        kolor=(0, 255, 0),
-        agresja=0.5
-    )
+        if panstwa_data["typ"]== "atk":
+            nowe_panstwo =PanstwoAgresywne(panstwa_data["nazwa"],x,y,panstwa_data["agresja"],kolor,config["ustawienia_gry"])
+        else:
+            nowe_panstwo =PanstwoDefensywne(panstwa_data["nazwa"],x,y,panstwa_data["agresja"],kolor,config["ustawienia_gry"])
 
-    panstwo4 = PanstwoAgresywne(
-        nazwa="p4",
-        stolica_x=rozmiar_siatki - 1,
-        stolica_y=0,
-        kolor=(255, 0, 255),
-        agresja=0.3,
-    )
-
-
-    lista_panstw = [panstwo1, panstwo2, panstwo3, panstwo4]
-    for p in lista_panstw:
-        for pole in p.terytorium:
-            zajete_pola[pole] =p
+        lista_panstw.append(nowe_panstwo)
+        zajete_pola[(x,y)] = nowe_panstwo
 
     def wykonaj_ture():
         for p in lista_panstw:
@@ -60,9 +49,6 @@ def main():
             p.utrzymanie_jednostek()
             p.produkcja()
             p.aktualizacja_statystyk()
-        for p in lista_panstw:
-            SystemWojen.sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
-
         for p in lista_panstw[:]:
             if p in lista_panstw:
                 SystemWojen.sprawdz_wojne(p,rozmiar_siatki,zajete_pola,lista_panstw)
