@@ -1,8 +1,7 @@
 import pygame
-
 from silnik.silnik_symulacji import generuj_mape
 from gui.wizualizacja import okno
-from silnik.silnik_panstwo import Panstwo
+from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
 
 def main():
     pygame.init()
@@ -13,7 +12,7 @@ def main():
 
     mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate, seed=seed)
 
-    panstwo1 = Panstwo(
+    panstwo1 = PanstwoAgresywne(
         nazwa="imperium",
         stolica_x=0,
         stolica_y=0,
@@ -21,7 +20,7 @@ def main():
         agresja=1
     )
 
-    panstwo2 = Panstwo(
+    panstwo2 = PanstwoDefensywne(
         nazwa="republika",
         stolica_x=rozmiar_siatki -1,
         stolica_y=rozmiar_siatki -1,
@@ -29,7 +28,7 @@ def main():
         agresja=0
     )
 
-    panstwo3 = Panstwo(
+    panstwo3 = PanstwoDefensywne(
         nazwa="p3",
         stolica_x=0,
         stolica_y=rozmiar_siatki - 1,
@@ -37,7 +36,7 @@ def main():
         agresja=0.5
     )
 
-    panstwo4 = Panstwo(
+    panstwo4 = PanstwoAgresywne(
         nazwa="p4",
         stolica_x=rozmiar_siatki - 1,
         stolica_y=0,

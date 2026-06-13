@@ -11,7 +11,6 @@ kolor_kamien = (128, 128, 128)
 kolor_zelazo = (192, 192, 192)
 kolor_jedzenie = (245,222,179)
 
-predkosc_wyswietlania_tur =1
 
 class okno:
     def __init__(self, grid, lista_panstw, rozmiar_siatki, zajete_pola, tura):
@@ -38,17 +37,15 @@ class okno:
 
 
     def run(self):
-        d= pygame.time.get_ticks()
+
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-            b = pygame.time.get_ticks()
-
-            if b - d > predkosc_wyswietlania_tur *1000:
-                self.numer_tury+=1
-                self.wykonaj_ture()
-                d=b
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self.numer_tury += 1
+                        self.wykonaj_ture()
 
             self.screen.fill(kolor_tlo)
 
@@ -108,11 +105,11 @@ class okno:
 
                 surowce_str = (
                     f"Terytorium: {len(panstwo.terytorium)} "
-                    f"Drewno: {panstwo.zasoby['drewno']} "
-                    f"Kamien: {panstwo.zasoby['kamien']} "
-                    f"Żelazo: {panstwo.zasoby['zelazo']} "
-                    f"Jedzenie: {panstwo.zasoby['jedzenie']} "
-                    f"Jednostki: {panstwo.zasoby['jednostki']} "
+                    f"Drewno: {panstwo.zasoby.get_drewno()} "
+                    f"Kamien: {panstwo.zasoby.get_kamien()} "
+                    f"Żelazo: {panstwo.zasoby.get_zelazo()} "
+                    f"Jedzenie: {panstwo.zasoby.get_jedzenie()} "
+                    f"Jednostki: {panstwo.zasoby.get_jednostki()} "
                 )
                 tekt_staty =self.czciona.render(surowce_str, True, panstwo.kolor)
                 self.screen.blit(tekt_staty, (self.pixele+ 20, pozycja_wyswietlenia))
