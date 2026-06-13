@@ -1,19 +1,22 @@
 import pygame
-
+import random
 from silnik.silnik_symulacji import generuj_mape
 from gui.wizualizacja import okno
+from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
+from silnik.silnik_wojen import SystemWojen
 from silnik.silnik_panstwo import Panstwo
 
 def main():
     pygame.init()
-    seed = 1
+    seed =14343
+    random.seed(seed)
     spawn_rate = 7
     rozmiar_siatki = 40
-    zajete_pola: set[tuple[int, int]] = set()
+    zajete_pola: dict[tuple[int, int], 'Panstwo'] = dict()
 
-    mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate, seed=seed)
+    mapa = generuj_mape(grid_size=rozmiar_siatki, spawn_rate=spawn_rate)
 
-    panstwo1 = Panstwo(
+    panstwo1 = PanstwoAgresywne(
         nazwa="imperium",
         stolica_x=0,
         stolica_y=0,
@@ -21,7 +24,7 @@ def main():
         agresja=1
     )
 
-    panstwo2 = Panstwo(
+    panstwo2 = PanstwoDefensywne(
         nazwa="republika",
         stolica_x=rozmiar_siatki -1,
         stolica_y=rozmiar_siatki -1,
@@ -29,7 +32,7 @@ def main():
         agresja=0
     )
 
-    panstwo3 = Panstwo(
+    panstwo3 = PanstwoDefensywne(
         nazwa="p3",
         stolica_x=0,
         stolica_y=rozmiar_siatki - 1,
@@ -37,7 +40,7 @@ def main():
         agresja=0.5
     )
 
-    panstwo4 = Panstwo(
+    panstwo4 = PanstwoAgresywne(
         nazwa="p4",
         stolica_x=rozmiar_siatki - 1,
         stolica_y=0,
@@ -48,7 +51,7 @@ def main():
     lista_panstw = [panstwo1, panstwo2, panstwo3, panstwo4]
     for p in lista_panstw:
         for pole in p.terytorium:
-            zajete_pola.add(pole)
+            zajete_pola[pole] =p
 
     def wykonaj_ture():
         for p in lista_panstw:
@@ -56,6 +59,10 @@ def main():
             p.utrzymanie_jednostek()
             p.produkcja()
             p.aktualizacja_statystyk()
+
+        for p in lista_panstw[:]:
+            if p in lista_panstw:
+                SystemWojen.sprawdz_wojne(p,rozmiar_siatki,zajete_pola,lista_panstw)
 
     ekran = okno(
         grid=mapa,
