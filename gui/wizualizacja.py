@@ -116,7 +116,7 @@ class okno:
 
                     for panstwo in self.lista_panstw:
                         if (x, y) in panstwo.terytorium:
-                            margines = int(self.kafelek * 0.2)
+                            margines = int(self.kafelek * 0.25)
                             kwadrat_panstwa = pygame.Rect(
                                 pozycjax + margines,
                                 pozycjay + margines,
