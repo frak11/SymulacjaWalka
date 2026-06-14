@@ -35,6 +35,18 @@ class okno:
         self.running = True
         self.numer_tury= 0
 
+        self.logi =[]
+        okno.instancja = self
+
+    def dodaj_wiadomosc(self, tekst: str, tura: int =None):
+        if tura is not None:
+            pelny_tekst = f"[{tura}] {tekst}"
+        else:
+            pelny_tekst = tekst
+        self.logi.append(pelny_tekst)
+        if len(self.logi)>15:
+            self.logi.pop(0)
+
 
     def run(self):
 
@@ -77,7 +89,7 @@ class okno:
                     pygame.draw.rect(self.screen, kolor_siatka, kwadrat, 1)
                     for panstwo in self.lista_panstw:
                         if (x, y) in panstwo.terytorium:
-                            margines = 4
+                            margines = self.kafelek*0.2
                             kwadrat_panstwa = pygame.Rect(
                                 pozycjax + margines,
                                 pozycjay + margines,
@@ -108,16 +120,54 @@ class okno:
                 pozycja_wyswietlenia += 30
 
                 surowce_str = (
-                    f"Terytorium: {len(panstwo.terytorium)} "
-                    f"Drewno: {panstwo.zasoby.get_drewno()} "
-                    f"Kamien: {panstwo.zasoby.get_kamien()} "
-                    f"Żelazo: {panstwo.zasoby.get_zelazo()} "
-                    f"Jedzenie: {panstwo.zasoby.get_jedzenie()} "
-                    f"Jednostki: {panstwo.zasoby.get_jednostki()} "
+                    f"Terytorium: {len(panstwo.terytorium)} |"
+                    f"Drewno: {panstwo.zasoby.get_drewno()} |"
+                    f"Kamien: {panstwo.zasoby.get_kamien()} |"
+                    f"Żelazo: {panstwo.zasoby.get_zelazo()} |"
+                    f"Jedzenie: {panstwo.zasoby.get_jedzenie()} |"
+                    f"Jednostki: {panstwo.zasoby.get_jednostki()} |"
                 )
                 tekt_staty =self.czciona.render(surowce_str, True, panstwo.kolor)
                 self.screen.blit(tekt_staty, (self.pixele+ 20, pozycja_wyswietlenia))
-                pozycja_wyswietlenia += 45
+                pozycja_wyswietlenia += 20
+
+                zel_b= panstwo.wyposazenie.get("zelazna_bron")
+                kam_b = panstwo.wyposazenie.get("kamienna_bron")
+                dre_b = panstwo.wyposazenie.get("drewniana_bron")
+                zel_p = panstwo.wyposazenie.get("zelazny_pancerz")
+                kam_p= panstwo.wyposazenie.get("kamienny_pancerz")
+                dre_p=panstwo.wyposazenie.get("drewniany_pancerz")
+
+                sila_str =(
+                    f"Siła: ATK: {panstwo.statystyki['atak']} | DEF: {panstwo.statystyki['obrona']} | ")
+                tekst_sila = self.czciona.render(sila_str, True, panstwo.kolor)
+                self.screen.blit(tekst_sila, (self.pixele + 20, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 20
+                uzbrojenie_str =(
+                f"Broń: Żelazna: {zel_b} | Kamienna: {kam_b} | Drewniana: {dre_b} |"
+                )
+                tekst_bron = self.czciona.render(uzbrojenie_str, True, panstwo.kolor)
+                self.screen.blit(tekst_bron, (self.pixele+ 20, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 20
+                pan_str = (
+                f"Pancerz: Żelazny: {zel_p} | Kamienny: {kam_p} | Drewniany: {dre_p} |")
+                tekt_pan=self.czciona.render(pan_str, True, panstwo.kolor)
+                self.screen.blit(tekt_pan, (self.pixele+ 20, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 30
+
+
+
+
+            pozycja_wyswietlenia += 30
+            tekst_naglowek_logi = self.czcionka_naglowek.render("Wydarzenia: ",True, (255, 215, 0))
+            self.screen.blit(tekst_naglowek_logi, (self.pixele+ 20, pozycja_wyswietlenia))
+            pozycja_wyswietlenia += 35
+
+            for tekst in self.logi:
+                tekst_render =self.czciona.render(tekst, True,(220, 220, 220))
+                self.screen.blit(tekst_render, (self.pixele+ 20, pozycja_wyswietlenia))
+                pozycja_wyswietlenia += 22
+
 
             pygame.display.flip()
 
