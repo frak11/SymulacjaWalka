@@ -1,7 +1,7 @@
 {
   "seed": 1,
   "spawn_rate": 7,
-  "rozmiar_siatki": 30,
+  "rozmiar_siatki": 40,
   "losowe_pozycje": true,
   "ustawienia_gry": {
     "drewno_na_start": 60,
@@ -33,6 +33,41 @@
       "typ": "def",
       "agresja": 0.7,
       "kolor": [100, 0, 180],
+      "stolica_x": 1,
+      "stolica_y": 32
+    },{
+      "nazwa": "p4",
+      "typ": "def",
+      "agresja": 0.7,
+      "kolor": "random",
+      "stolica_x": 1,
+      "stolica_y": 32
+    },{
+      "nazwa": "p5",
+      "typ": "def",
+      "agresja": 0.7,
+      "kolor": "random",
+      "stolica_x": 1,
+      "stolica_y": 32
+    },{
+      "nazwa": "p6",
+      "typ": "def",
+      "agresja": 0.7,
+      "kolor": "random",
+      "stolica_x": 1,
+      "stolica_y": 32
+    },{
+      "nazwa": "p7",
+      "typ": "def",
+      "agresja": 0.7,
+      "kolor": "random",
+      "stolica_x": 1,
+      "stolica_y": 32
+    },{
+      "nazwa": "p8",
+      "typ": "def",
+      "agresja": 0.7,
+      "kolor": "random",
       "stolica_x": 1,
       "stolica_y": 32
     }
