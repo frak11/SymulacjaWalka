@@ -24,6 +24,11 @@ def main():
 
     lista_panstw = []
     for panstwa_data in config["panstwa"]:
+        kolor = panstwa_data["kolor"]
+        if kolor == "random":
+            kolor =(random.randint(100,255),random.randint(100,255),random.randint(100,255))
+        else:
+            kolor = tuple(kolor)
         if losowe_pozycje:
             while True:
                 x = random.randrange(0, rozmiar_siatki-1)
@@ -33,7 +38,7 @@ def main():
         else:
             x=panstwa_data["stolica_x"]
             y=panstwa_data["stolica_y"]
-        kolor = tuple(panstwa_data["kolor"])
+
 
         if panstwa_data["typ"]== "atk":
             nowe_panstwo =PanstwoAgresywne(panstwa_data["nazwa"],x,y,panstwa_data["agresja"],kolor,config["ustawienia_gry"])
