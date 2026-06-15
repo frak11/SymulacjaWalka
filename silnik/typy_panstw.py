@@ -19,7 +19,7 @@ class PanstwoAgresywne(Panstwo):
 
 
     def przydziel_jednostki(
-       self, grid_size: int, zajete_pola: dict[tuple[int, int]], grid: list[list[str]]
+       self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], grid: list[list[str]]
     ):
        koszt =self.koszt_ekspansji + len(self.terytorium)
 
