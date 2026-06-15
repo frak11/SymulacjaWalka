@@ -1,4 +1,3 @@
-import math
 class Zasoby:
     def __init__(self,drewno: int, kamien: int,zelazo: int,jedzenie: int ,jednostki: int):
         self._drewno = drewno
@@ -19,4 +18,3 @@ class Zasoby:
     def zmien_jedzenie(self, wartosc: int): self._jedzenie += wartosc
     def zmien_jednostki(self, wartosc: int): self._jednostki += wartosc
     def ustaw_jedzenie(self, wartosc: int): self._jednostki = wartosc
-

@@ -12,7 +12,7 @@ kolor_zelazo = (192, 192, 192)
 kolor_jedzenie = (245,222,179)
 
 
-class okno:
+class Okno:
     def __init__(self, grid, lista_panstw, rozmiar_siatki, zajete_pola, tura):
         self.czciona = pygame.font.SysFont("Arial", 18)
         self.czcionka_naglowek = pygame.font.SysFont("Arial", 24, bold=True)
@@ -75,16 +75,15 @@ class okno:
 
                     pygame.draw.rect(self.screen, kolor, kwadrat)
                     pygame.draw.rect(self.screen, kolor_siatka, kwadrat, 1)
-                    for panstwo in self.lista_panstw:
-                        if (x, y) in panstwo.terytorium:
-                            margines = 4
-                            kwadrat_panstwa = pygame.Rect(
-                                pozycjax + margines,
-                                pozycjay + margines,
-                                self.kafelek - (margines * 2),
-                                self.kafelek - (margines * 2),
-                            )
-                            pygame.draw.rect(self.screen, panstwo.kolor, kwadrat_panstwa)
+                    if (x, y) in self.zajete_pola:
+                        margines = 4
+                        kwadrat_panstwa = pygame.Rect(
+                            pozycjax + margines,
+                            pozycjay + margines,
+                            self.kafelek - (margines * 2),
+                            self.kafelek - (margines * 2),
+                        )
+                        pygame.draw.rect(self.screen, self.zajete_pola[(x, y)].kolor, kwadrat_panstwa)
 
             obszar_panelu = pygame.Rect(self.pixele, 0, self.panel_boczny, self.pixele)
             pygame.draw.rect(self.screen, kolor_panelu, obszar_panelu)

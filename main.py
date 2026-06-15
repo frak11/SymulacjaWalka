@@ -1,7 +1,7 @@
 import pygame
 import random
 from silnik.silnik_symulacji import generuj_mape
-from gui.wizualizacja import okno
+from gui.wizualizacja import Okno
 from silnik.typy_panstw import PanstwoAgresywne,PanstwoDefensywne
 from silnik.silnik_wojen import SystemWojen
 from silnik.silnik_panstwo import Panstwo
@@ -60,14 +60,14 @@ def main():
             p.utrzymanie_jednostek()
             p.produkcja()
             p.aktualizacja_statystyk()
-        for p in lista_panstw:
-            SystemWojen.sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
 
-        for p in lista_panstw[:]:
-            if p in lista_panstw:
-                SystemWojen.sprawdz_wojne(p,rozmiar_siatki,zajete_pola,lista_panstw)
+        for panstwo in lista_panstw[:]:
+            if panstwo in lista_panstw:
+                SystemWojen.sprawdz_wojne(panstwo, rozmiar_siatki, zajete_pola, lista_panstw)
 
-    ekran = okno(
+        SystemWojen.przejmij_pola(zajete_pola)
+
+    ekran = Okno(
         grid=mapa,
         lista_panstw=lista_panstw,
         rozmiar_siatki=rozmiar_siatki,

@@ -1,4 +1,3 @@
-import math
 import random
 from silnik.zasoby import Zasoby
 from silnik.wyposazenie import Wyposazenie
@@ -173,4 +172,3 @@ class Panstwo:
         self, grid_size: int, zajete_pola: set[tuple[int, int]], grid: list[list[str]]
     ):
         pass
-
