@@ -1,5 +1,9 @@
 import random
+
+from gui.wizualizacja import okno
 from silnik.silnik_panstwo import Panstwo
+
+
 class SystemWojen:
     trwajace_wojny: dict['Panstwo', list[tuple[int, int]]] = dict()
 
@@ -7,6 +11,8 @@ class SystemWojen:
     def sprawdz_wojne(cls, panstwo_atakujace, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], lista_panstw: list[Panstwo]):
         mozliwe_pola: set[tuple[int, int]] = set()
         sasiedzi=[(0,-1),(-1,0),(0,1),(1,0)]
+        tury =okno.instancja.numer_tury
+    
         for x, y in panstwo_atakujace.terytorium:
             for dx, dy in sasiedzi:
                 nx, ny = x+dx, y+dy
@@ -18,10 +24,12 @@ class SystemWojen:
             losowanie_pola = random.choice(list(mozliwe_pola))
             panstwo_broniace = zajete_pola[losowanie_pola]
             chance = random.random()
+            atk = panstwo_atakujace.statystyki["atak"]
+            obr = panstwo_broniace.statystyki["obrona"]
             if panstwo_broniace.agresja <= panstwo_atakujace.agresja:
-                print(panstwo_atakujace.nazwa + " atakuje " + panstwo_broniace.nazwa)
+                okno.instancja.dodaj_wiadomosc(f"{panstwo_atakujace.nazwa} (Atk:{atk}) atakuje {panstwo_broniace.nazwa} (Def:{obr}", tura =tury)
                 if chance < panstwo_atakujace.agresja:
-                    print("szansa < agresja")
+                    okno.instancja.dodaj_wiadomosc(f"szansa < agresja")
                     while True:
                         panstwo_broniace.statystyki["obrona"] -= panstwo_atakujace.statystyki["atak"]
                         panstwo_atakujace.statystyki["obrona"] -= panstwo_broniace.statystyki["atak"]
@@ -34,24 +42,24 @@ class SystemWojen:
                             panstwo_atakujace.terytorium.clear()
                             lista_panstw.remove(panstwo_atakujace)
                             lista_panstw.remove(panstwo_broniace)
-                            print(panstwo_broniace.nazwa + " i " + panstwo_atakujace.nazwa + " zniszczyły się nawzajem")
+                            okno.instancja.dodaj_wiadomosc(f"{panstwo_broniace.nazwa} i {panstwo_atakujace.nazwa} zniszczyły się nawzajem", tura =tury)
                             return
                         elif panstwo_broniace.statystyki["obrona"] < 0:
-                            print(panstwo_broniace.nazwa + " przegrywa")
+                            okno.instancja.dodaj_wiadomosc(f"{panstwo_broniace.nazwa} przegrywa", tura =tury)
                             # panstwo broniace przegralo
                             cls.trwajace_wojny[panstwo_atakujace] = list(panstwo_broniace.terytorium)
                             panstwo_broniace.terytorium.clear()
                             lista_panstw.remove(panstwo_broniace)
                             return
                         elif panstwo_atakujace.statystyki["obrona"] < 0:
-                            print(panstwo_atakujace.nazwa + " przegrywa")
+                            okno.instancja.dodaj_wiadomosc(f"{panstwo_atakujace.nazwa} + przegrywa", tura =tury)
                             # panstwo atakujace przegralo
                             cls.trwajace_wojny[panstwo_broniace] = list(panstwo_atakujace.terytorium)
                             panstwo_atakujace.terytorium.clear()
                             lista_panstw.remove(panstwo_atakujace)
                             return
                 else:
-                    print("za mala szansa")
+                    okno.instancja.dodaj_wiadomosc(f"za mala szansa, nie ma wojny", tura =tury)
 
     @classmethod
     def przejmij_pola(cls, zajete_pola):

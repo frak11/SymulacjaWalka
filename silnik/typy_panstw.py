@@ -1,5 +1,5 @@
 import math
-from silnik.silnik_panstwo import Panstwo,koszt_ekspansji,ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki,ilosc_jedzenia_z_pola
+from silnik.silnik_panstwo import Panstwo
 
 class PanstwoAgresywne(Panstwo):
     def __init__(
@@ -9,8 +9,9 @@ class PanstwoAgresywne(Panstwo):
             stolica_y: int,
             agresja: float,
             kolor: tuple[int, int, int],
+            config: dict
     ):
-        super().__init__(nazwa,stolica_x,stolica_y,agresja,kolor)
+        super().__init__(nazwa,stolica_x,stolica_y,agresja,kolor,config)
         self.typ="atk"
 
 
@@ -20,7 +21,7 @@ class PanstwoAgresywne(Panstwo):
     def przydziel_jednostki(
        self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], grid: list[list[str]]
     ):
-       koszt =koszt_ekspansji + len(self.terytorium)
+       koszt =self.koszt_ekspansji + len(self.terytorium)
 
           # tworzenie jednostek tak aby ich maksymalna liczba nie przekraczala ilosci wolnych pol * agresja
        while True:
@@ -29,9 +30,9 @@ class PanstwoAgresywne(Panstwo):
            ):
                if (
                    self.zasoby.get_drewno()
-                   >= ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki
+                   >= self.ilosc_drewna_rekrutacja
                ):
-                   self.zasoby.zmien_drewno(-ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki)
+                   self.zasoby.zmien_drewno(-self.ilosc_drewna_rekrutacja)
                    self.zasoby.zmien_jednostki(1)
                else:
                    break
@@ -43,7 +44,7 @@ class PanstwoAgresywne(Panstwo):
           # zdobywanie jedzenie tak aby jednostki nie ginely z jego braku
        if self.zasoby.get_jedzenie() < self.zasoby.get_jednostki():
                ma_zyzne_pole = any(grid[y][x] == "J" for x, y in self.terytorium)
-               wydajnosc = ilosc_jedzenia_z_pola if ma_zyzne_pole else 1
+               wydajnosc = self.ilosc_jedzenia_z_pola if ma_zyzne_pole else 1
                ilosc_jednostek_potrzebnych_do_zdobycia_jedzenia = math.ceil(
                    (self.zasoby.get_jednostki() - self.zasoby.get_jedzenie())
                    / wydajnosc
@@ -52,7 +53,7 @@ class PanstwoAgresywne(Panstwo):
                    ilosc_jednostek_potrzebnych_do_zdobycia_jedzenia
                ):
                    if temp_jednostki > 0:
-                       self.zasoby.zmien_jedzenie(ilosc_jedzenia_z_pola)
+                       self.zasoby.zmien_jedzenie(self.ilosc_jedzenia_z_pola)
                        temp_jednostki -= 1
                    else:
                        break
@@ -69,7 +70,7 @@ class PanstwoAgresywne(Panstwo):
            if self.zasoby.get_drewno() >= koszt and temp_jednostki > 0:
                self.ekspansja(grid_size, zajete_pola, koszt)
                temp_jednostki -= 1
-               koszt = koszt_ekspansji + len(self.terytorium)
+               koszt = self.koszt_ekspansji + len(self.terytorium)
            else:
                break
 
@@ -118,8 +119,9 @@ class PanstwoDefensywne(Panstwo):
             stolica_y: int,
             agresja: float,
             kolor: tuple[int, int, int],
+            config: dict
     ):
-        super().__init__(nazwa,stolica_x,stolica_y,agresja,kolor)
+        super().__init__(nazwa,stolica_x,stolica_y,agresja,kolor,config)
         self.typ="def"
 
 
@@ -129,7 +131,7 @@ class PanstwoDefensywne(Panstwo):
     def przydziel_jednostki(
        self, grid_size: int, zajete_pola: dict[tuple[int, int], 'Panstwo'], grid: list[list[str]]
     ):
-       koszt =koszt_ekspansji + len(self.terytorium)
+       koszt =self.koszt_ekspansji + len(self.terytorium)
 
           # tworzenie jednostek tak aby ich maksymalna liczba nie przekraczala ilosci wolnych pol * agresja
        while True:
@@ -138,9 +140,9 @@ class PanstwoDefensywne(Panstwo):
            ):
                if (
                    self.zasoby.get_drewno()
-                   >= ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki
+                   >= self.ilosc_drewna_rekrutacja
                ):
-                   self.zasoby.zmien_drewno(-ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki)
+                   self.zasoby.zmien_drewno(-self.ilosc_drewna_rekrutacja)
                    self.zasoby.zmien_jednostki(1)
                else:
                    break
@@ -154,13 +156,13 @@ class PanstwoDefensywne(Panstwo):
             if any(grid[y][x] == "J" for x, y in self.terytorium):
                ilosc_jednostek_potrzebnych_do_zdobycia_jedzenia = math.ceil(
                    (self.zasoby.get_jednostki() - self.zasoby.get_jedzenie())
-                   / ilosc_jedzenia_z_pola
+                   / self.ilosc_jedzenia_z_pola
                )
                for jednostki in range(
                    ilosc_jednostek_potrzebnych_do_zdobycia_jedzenia
                ):
                    if temp_jednostki > 0:
-                       self.zasoby.zmien_jedzenie(ilosc_jedzenia_z_pola)
+                       self.zasoby.zmien_jedzenie(self.ilosc_jedzenia_z_pola)
                        temp_jednostki -= 1
                    else:
                        break
@@ -177,7 +179,7 @@ class PanstwoDefensywne(Panstwo):
            if self.zasoby.get_drewno() >= koszt and temp_jednostki > 0:
                self.ekspansja(grid_size, zajete_pola, koszt)
                temp_jednostki -= 1
-               koszt = koszt_ekspansji + len(self.terytorium)
+               koszt = self.koszt_ekspansji + len(self.terytorium)
            else:
                break
 

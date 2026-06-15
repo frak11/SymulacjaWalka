@@ -2,14 +2,14 @@ import random
 from silnik.zasoby import Zasoby
 from silnik.wyposazenie import Wyposazenie
 
-drewno_na_start: int = 60
-kamien_na_start: int = 0
-zelazo_na_start: int = 0
-jedzenie_na_start: int = 20
-jednostki_na_start: int = 3
+# drewno_na_start: int = 60
+# kamien_na_start: int = 0
+# zelazo_na_start: int = 0
+# jedzenie_na_start: int = 20
+# jednostki_na_start: int = 3
 ilosc_jedzenia_z_pola: int = 3
-ilosc_drewna_potrzebna_do_rekrutacji_nowej_jednostki: int = 1
-koszt_ekspansji: int = 5
+ilosc_drewna_rekrutacja: int = 1
+# koszt_ekspansji: int = 5
 
 obrazenia_broni_zelaznej: int = 4
 obrazenia_broni_kamiennej: int = 3
@@ -30,12 +30,24 @@ class Panstwo:
         stolica_y: int,
         agresja: float,
         kolor: tuple[int, int, int],
+        config: dict
     ):
         self.nazwa = nazwa
         self.kolor = kolor
         self.agresja = agresja
         self.terytorium: set[tuple[int, int]] = {(stolica_x, stolica_y)}
-        self.zasoby = Zasoby(drewno_na_start, kamien_na_start,zelazo_na_start,jedzenie_na_start,jednostki_na_start)
+        self.ilosc_jedzenia_z_pola = ilosc_jedzenia_z_pola
+        self.ilosc_drewna_rekrutacja = ilosc_drewna_rekrutacja
+
+        self.koszt_ekspansji=config["koszt_ekspansji"]
+        self.zasoby=Zasoby(
+            config["drewno_na_start"],
+            config["kamien_na_start"],
+            config["zelazo_na_start"],
+            config["jedzenie_na_start"],
+            config["jednostki_na_start"]
+        )
+        
         self.wyposazenie =Wyposazenie()
 
         self.statystyki: dict[str, int] = {
