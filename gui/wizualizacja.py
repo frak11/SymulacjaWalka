@@ -48,7 +48,7 @@ class Okno:
         self.numer_tury = 0
 
         self.logi = []
-        okno.instancja = self
+        Okno.instancja = self
 
     def dodaj_wiadomosc(self, tekst: str, tura: int = None):
         if tura is not None:
