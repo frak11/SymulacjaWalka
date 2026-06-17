@@ -49,7 +49,7 @@ def main():
         zajete_pola[(x,y)] = nowe_panstwo
 
     def wykonaj_ture():
-        for p in lista_panstw:
+        for p in lista_panstw[:]:
             p.przydziel_jednostki(rozmiar_siatki, zajete_pola, mapa)
             p.utrzymanie_jednostek()
             p.produkcja()
@@ -58,7 +58,7 @@ def main():
         for p in lista_panstw[:]:
             if p in lista_panstw:
                 SystemWojen.sprawdz_wojne(p,rozmiar_siatki,zajete_pola,lista_panstw)
-        SystemWojen.przejmij_pola(zajete_pola)
+        SystemWojen.przejmij_pola(zajete_pola, lista_panstw)
 
     ekran = Okno(
         grid=mapa,

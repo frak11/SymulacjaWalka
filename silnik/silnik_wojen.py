@@ -55,6 +55,9 @@ class SystemWojen:
                             Okno.instancja.dodaj_wiadomosc(f"{panstwo_atakujace.nazwa} + przegrywa", tura =tury)
                             # panstwo atakujace przegralo
                             cls.trwajace_wojny[panstwo_broniace] = list(panstwo_atakujace.terytorium)
+                            for pole in panstwo_atakujace.terytorium:
+                                if pole in zajete_pola:
+                                    del zajete_pola[pole]
                             panstwo_atakujace.terytorium.clear()
                             lista_panstw.remove(panstwo_atakujace)
                             return
@@ -62,8 +65,13 @@ class SystemWojen:
                     Okno.instancja.dodaj_wiadomosc(f"za mala szansa, nie ma wojny", tura =tury)
 
     @classmethod
-    def przejmij_pola(cls, zajete_pola):
+    def przejmij_pola(cls, zajete_pola, lista_panstw):
         for zwyciezca, przegrany_terytorium in list(cls.trwajace_wojny.items()):
+
+            if zwyciezca is not None and zwyciezca not in lista_panstw:
+                    del cls.trwajace_wojny[zwyciezca]
+                    continue
+
             for x in range(5):
                 if przegrany_terytorium:
                     pole = przegrany_terytorium.pop()
@@ -71,7 +79,8 @@ class SystemWojen:
                         zwyciezca.terytorium.add(pole)
                         zajete_pola[pole] = zwyciezca
                     else:
-                        del zajete_pola[pole]
+                        if pole in zajete_pola:
+                            del zajete_pola[pole]
                     if not przegrany_terytorium:
                         del cls.trwajace_wojny[zwyciezca]
                         break
