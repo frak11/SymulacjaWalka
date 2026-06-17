@@ -78,16 +78,6 @@ class PanstwoAgresywne(Panstwo):
        while temp_jednostki > 0:
            zebrano_cos = False
            if (
-               min(self.zasoby.get_drewno(), self.zasoby.get_kamien(), self.zasoby.get_zelazo())
-               == self.zasoby.get_zelazo()
-               and any(grid[y][x] == "Z" for x, y in self.terytorium)
-               and self.zasoby.get_kamien() > 0
-           ):
-               self.zasoby.zmien_kamien(-1)
-               self.zasoby.zmien_zelazo(1)
-               temp_jednostki -= 1
-               zebrano_cos = True
-           elif (
                min(self.zasoby.get_drewno(), self.zasoby.get_kamien()) == self.zasoby.get_kamien()
                and any(grid[y][x] == "K" for x, y in self.terytorium)
                and self.zasoby.get_drewno() > 0

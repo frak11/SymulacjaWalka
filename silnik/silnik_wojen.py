@@ -38,9 +38,7 @@ class SystemWojen:
                             pomieszane_pola = list(panstwo_broniace.terytorium) + list(panstwo_atakujace.terytorium)
                             random.shuffle(pomieszane_pola)
                             cls.trwajace_wojny[None] = cls.trwajace_wojny.get(None, []) + pomieszane_pola
-                            for pole in pomieszane_pola:
-                                if pole in zajete_pola:
-                                    del zajete_pola[pole]
+
                             panstwo_broniace.terytorium.clear()
                             panstwo_atakujace.terytorium.clear()
                             lista_panstw.remove(panstwo_atakujace)
@@ -51,9 +49,6 @@ class SystemWojen:
                             Okno.instancja.dodaj_wiadomosc(f"{panstwo_broniace.nazwa} przegrywa", tura =tury)
                             # panstwo broniace przegralo
                             cls.trwajace_wojny[panstwo_atakujace] = list(panstwo_broniace.terytorium)
-                            for pole in panstwo_broniace.terytorium:
-                                if pole in zajete_pola:
-                                    del zajete_pola[pole]
 
                             panstwo_broniace.terytorium.clear()
                             lista_panstw.remove(panstwo_broniace)
@@ -62,9 +57,7 @@ class SystemWojen:
                             Okno.instancja.dodaj_wiadomosc(f"{panstwo_atakujace.nazwa} + przegrywa", tura =tury)
                             # panstwo atakujace przegralo
                             cls.trwajace_wojny[panstwo_broniace] = list(panstwo_atakujace.terytorium)
-                            for pole in panstwo_atakujace.terytorium:
-                                if pole in zajete_pola:
-                                    del zajete_pola[pole]
+
                             panstwo_atakujace.terytorium.clear()
                             lista_panstw.remove(panstwo_atakujace)
                             return

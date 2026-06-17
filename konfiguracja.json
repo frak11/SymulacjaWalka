@@ -1,7 +1,7 @@
 {
-  "seed": 1,
+  "seed": 1232,
   "spawn_rate": 7,
-  "rozmiar_siatki": 40,
+  "rozmiar_siatki": 20,
   "losowe_pozycje": true,
   "ustawienia_gry": {
     "drewno_na_start": 60,
