@@ -31,7 +31,7 @@ class Okno:
             self.kafelek = 1
 
         self.pixele = self.gridSize * self.kafelek
-        self.panel_lewy= docelowy_rozmiar_mapy *0.43
+        self.panel_lewy= docelowy_rozmiar_mapy *0.5
         self.panel_prawy = docelowy_rozmiar_mapy *0.43
 
         self.czciona = pygame.font.SysFont("Arial", max(12, int(self.pixele * 0.018)))

@@ -62,6 +62,11 @@ def main():
                 SystemWojen.sprawdz_wojne(p, rozmiar_siatki, zajete_pola, lista_panstw)
         SystemWojen.przejmij_pola(zajete_pola, lista_panstw)
 
+        if len(lista_panstw) == 1:
+            Okno.instancja.dodaj_wiadomosc(f"Symulacja zakończona, panstwo {lista_panstw[0].nazwa} zwycięzyło!")
+        if len(lista_panstw) == 0:
+            Okno.instancja.dodaj_wiadomosc("Totalna anihilacja: żadne państwo nie wygrało!")
+
     ekran = Okno(
         grid=mapa,
         lista_panstw=lista_panstw,
