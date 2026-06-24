@@ -21,6 +21,7 @@ class Okno:
         self.rozmiar_siatki = rozmiar_siatki
         self.zajete_pola = zajete_pola
         self.wykonaj_ture = tura
+        self.gra_aktywna = True
 
         pygame.display.init()
         monitor_wysokosc = pygame.display.Info().current_h
@@ -66,13 +67,18 @@ class Okno:
                 if event.type == pygame.QUIT:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        self.numer_tury += 1
-                        self.wykonaj_ture()
+                    if self.gra_aktywna== True:
+                        if event.key == pygame.K_SPACE:
+                            self.numer_tury += 1
+                            self.wykonaj_ture()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    for tury in range(10):
-                        self.numer_tury += 1
-                        self.wykonaj_ture()
+                    if self.gra_aktywna== True:
+                        for tury in range(10):
+                            if not self.gra_aktywna:
+                                break
+                            self.numer_tury += 1
+                            self.wykonaj_ture()
+
 
             self.screen.fill(kolor_tlo)
             

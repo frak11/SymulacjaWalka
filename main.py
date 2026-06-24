@@ -64,8 +64,10 @@ def main():
 
         if len(lista_panstw) == 1:
             Okno.instancja.dodaj_wiadomosc(f"Symulacja zakończona, panstwo {lista_panstw[0].nazwa} zwycięzyło!")
+            Okno.instancja.gra_aktywna = False
         if len(lista_panstw) == 0:
             Okno.instancja.dodaj_wiadomosc("Totalna anihilacja: żadne państwo nie wygrało!")
+            Okno.instancja.gra_aktywna = False
 
     ekran = Okno(
         grid=mapa,
